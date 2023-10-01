@@ -106,9 +106,8 @@
   <p class="date">Oct 5, 2023</p>
 </section>
 
-<section class="slide level1">
-
-<h2 id="how-did-we-get-here">How Did We Get Here?</h2>
+<section id="how-did-we-get-here" class="slide level2">
+<h2>How Did We Get Here?</h2>
 <p>And this is some text</p>
 <ul>
 <li>You’re a multitenant platform SRE</li>
@@ -117,8 +116,8 @@
 <li>How can you let them know when somebody goes “off path”?</li>
 </ul>
 </section>
-<section id="lets-talk-about-policy" class="slide level1">
-<h1>Let’s Talk About Policy!</h1>
+<section id="lets-talk-about-policy" class="slide level2">
+<h2>Let’s Talk About Policy!</h2>
 <ul>
 <li>if/then in code for one user is … submoptimal</li>
 <li>My team should get out of the way of their data collection</li>
@@ -127,9 +126,8 @@
 </ul>
 <p>There is - it’s Rego</p>
 </section>
-<section class="slide level1">
-
-<h2 id="whats-rego">What’s Rego</h2>
+<section id="whats-rego" class="slide level2">
+<h2>What’s Rego</h2>
 <ul>
 <li>Rego is the language behind Open Policy Agent and conftest.</li>
 <li>“Rego was inspired .. [a] query language. Rego queries are
@@ -140,7 +138,9 @@ role="doc-noteref"><sup>1</sup></a></li>
 <li>So if your API produces JSON, we can see what does (and does not)
 match your policy.</li>
 </ul>
-<h2 id="how-is-this-useful">How is this Useful</h2>
+</section>
+<section id="how-is-this-useful" class="slide level2">
+<h2>How is this Useful</h2>
 <ul>
 <li>Say your platform links workflows to some owner by their email
 address</li>
@@ -148,10 +148,9 @@ address</li>
 Managed Service Provider?</li>
 </ul>
 </section>
-<section class="slide level1">
-
-<h2 id="lets-validate-email-domains">Let’s validate email domains</h2>
-<h3 id="the-data">(the data)</h3>
+<section id="lets-validate-email-domains" class="slide level2">
+<h2>Let’s validate email domains</h2>
+<h3 id="the-data">the data</h3>
 <pre><code>name: Second
 size: 72
 accountFlows:
@@ -171,9 +170,8 @@ accountFlows:
   - act_flow_003:
     responsibleEmail: vhhcjfjj@vcap.me</code></pre>
 </section>
-<section class="slide level1">
-
-<h2 id="lets-validate-email-domains-1">Let’s validate email domains</h2>
+<section id="lets-validate-email-domains-1" class="slide level2">
+<h2>Let’s validate email domains</h2>
 <h3 id="the-policy">the policy</h3>
 <pre class="rego"><code>deny[msg] {
     flow := input.accountFlows[_]
@@ -191,9 +189,8 @@ is_internal_email(email_address) = true {
     matched == true 
 } else = false </code></pre>
 </section>
-<section class="slide level1">
-
-<h2 id="lets-validate-email-domains-2">Let’s validate email domains</h2>
+<section id="lets-validate-email-domains-2" class="slide level2">
+<h2>Let’s validate email domains</h2>
 <h3 id="the-results">the results</h3>
 <pre><code>&gt;conftest test --policy policies\domain \
 backend/data/tenants/Second.yaml
@@ -202,37 +199,33 @@ External email addres in flow act_flow_003: \
 vhhcjfjj@vcap.me
 1 test, 0 passed, 0 warnings, 1 failure, 0 exceptions</code></pre>
 </section>
-<section class="slide level1">
-
-<h2 id="but-biz-shouldnt-need-conftest">But Biz Shouldn’t Need
-conftest</h2>
+<section id="but-biz-shouldnt-need-conftest" class="slide level2">
+<h2>But Biz Shouldn’t Need conftest</h2>
 <ul>
 <li>While userful, this is a tall ask for less technical folks</li>
 <li>Clould we “cloud” it?</li>
-<li><h2 id="opa-is-the-engine-running-as-a-server">OPA is the engine
-running as a server</h2></li>
+<li>OPA is the engine running as a server</li>
 </ul>
-<h2 id="opa-is-a-decision-server2">OPA is a Decision Server<a
-href="#/fn2" class="footnote-ref" id="fnref2"
-role="doc-noteref"><sup>2</sup></a></h2>
+</section>
+<section id="opa-is-a-decision-server2" class="slide level2">
+<h2>OPA is a Decision Server<a href="#/fn2" class="footnote-ref"
+id="fnref2" role="doc-noteref"><sup>2</sup></a></h2>
 <ul>
 <li>Common infra for policy management/evaluation</li>
 <li>Works for one-offs and/or your prod flows</li>
 <li>Battle hardened, flexible deployments</li>
 </ul>
 </section>
-<section class="slide level1">
-
-<h2 id="a-query-with-no-data-on-disk">A query With No Data on Disk</h2>
+<section id="a-query-with-no-data-on-disk" class="slide level2">
+<h2>A query With No Data on Disk</h2>
 <div class="sourceCode" id="cb4"><pre
 class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> http://localhost:8000/tenant/Second  <span class="kw">|</span><span class="dt">\</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">jq</span> {<span class="st">&quot;input&quot;</span>:.} <span class="kw">|</span><span class="dt">\</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">curl</span> <span class="st">&quot;http://localhost:8181/v1/data/main&quot;</span> <span class="dt">\</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">-H</span> <span class="st">&quot;Content-Type: application/json&quot;</span> <span class="at">--data</span> @-</span></code></pre></div>
 </section>
-<section class="slide level1">
-
-<h2 id="but-theres-more-right">But there’s more, right?</h2>
+<section id="but-theres-more-right" class="slide level2">
+<h2>But there’s more, right?</h2>
 <ul>
 <li>With our framework in place, can we do more interesting things? :::
 incremental</li>
@@ -240,9 +233,8 @@ incremental</li>
 <li>This rule will build on our existing ruleset</li>
 </ul>
 </section>
-<section class="slide level1">
-
-<h2 id="a-rule-on-a-rule">A Rule on a Rule</h2>
+<section id="a-rule-on-a-rule" class="slide level2">
+<h2>A Rule on a Rule</h2>
 <h3 id="data-from-an-external-source">Data from an external source</h3>
 <ul>
 <li>OPA can load static data or reach out to endpoints</li>
@@ -253,9 +245,8 @@ incremental</li>
     }
 }</code></pre>
 </section>
-<section class="slide level1">
-
-<h2 id="a-rule-on-a-rule-1">A Rule on a Rule</h2>
+<section id="a-rule-on-a-rule-1" class="slide level2">
+<h2>A Rule on a Rule</h2>
 <h3 id="hr-email-address-policy">HR email address policy</h3>
 <pre><code>HRviolation[msg] {
     flow := input.accountFlows[_]
@@ -267,7 +258,9 @@ incremental</li>
     flow[key].FlowNodes[nodeSet][&quot;address&quot;] in data.servers[&quot;businessGroup&quot;][&quot;HR&quot;]
     msg = sprintf(&quot;External email addres in an HR flow  %v: %v&quot;, [key, flow[key].responsibleEmail])
 }</code></pre>
-<h2 id="add-feedback-to-api">Add Feedback to API</h2>
+</section>
+<section id="add-feedback-to-api" class="slide level2">
+<h2>Add Feedback to API</h2>
 <pre><code>app.post(&#39;/tenantWithCheck/:tenantId&#39;, async (req: Request, res: Response) =&gt; {
   let object: Tenant = req.body
   object[&#39;name&#39;] = req.params.tenantId
@@ -282,11 +275,11 @@ incremental</li>
   }
 });</code></pre>
 </section>
-<section class="slide level1">
-
-<h2 id="thanks">Thanks!</h2>
+<section id="thanks" class="slide level2">
+<h2>Thanks!</h2>
 <ul>
 <li>Demo?</li>
+<li>Testing!</li>
 <li>https://github.com/sweeneyb/policy-demos</li>
 </ul>
 </section>

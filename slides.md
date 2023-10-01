@@ -16,7 +16,7 @@ And this is some text
 
 ---
 
-# Let's Talk About Policy!
+## Let's Talk About Policy!
 * if/then in code for one user is ... submoptimal
 * My team should get out of the way of their data collection
 * If only there were a language that would allow them to express rules (and maybe let us enforce them)
@@ -34,6 +34,8 @@ There is - it's Rego
 
 [^1]: https://www.openpolicyagent.org/docs/latest/policy-language
 
+---
+
 ## How is this Useful
 
 * Say your platform links workflows to some owner by their email address
@@ -42,7 +44,7 @@ There is - it's Rego
 ---
 
 ## Let's validate email domains
-### (the data)
+### the data
 ```
 name: Second
 size: 72
@@ -102,6 +104,7 @@ vhhcjfjj@vcap.me
 * While userful, this is a tall ask for less technical folks
 * Clould we "cloud" it?
 * OPA is the engine running as a server
+
 ---
 
 ## OPA is a Decision Server[^2]
@@ -177,4 +180,5 @@ app.post('/tenantWithCheck/:tenantId', async (req: Request, res: Response) => {
 
 ## Thanks!
 * Demo?
+* Testing!
 * https://github.com/sweeneyb/policy-demos
