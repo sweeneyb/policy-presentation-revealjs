@@ -13,7 +13,9 @@ And this is some text
 * Power user wants a narrow "happy path"
 * How can you let them know when somebody goes "off path"?
 
+
 ---
+
 # Let's Talk About Policy!
 * if/then in code for one user is ... submoptimal
 * My team should get out of the way of their data collection
@@ -23,6 +25,7 @@ And this is some text
 There is - it's Rego
 
 ---
+
 ## What's Rego
 
 * Rego is the language behind Open Policy Agent and conftest.
@@ -30,7 +33,7 @@ There is - it's Rego
 * So if your API produces JSON, we can see what does (and does not) match your policy.
 
 [^1]: https://www.openpolicyagent.org/docs/latest/policy-language
----
+
 ## How is this Useful
 
 * Say your platform links workflows to some owner by their email address
@@ -82,6 +85,7 @@ is_internal_email(email_address) = true {
 } else = false 
 ```
 ---
+
 ## Let's validate email domains
 ### the results
 ```
@@ -100,14 +104,15 @@ vhhcjfjj@vcap.me
 * OPA is the engine running as a server
 ---
 
-## OPA is a Decision Server[^1]
+## OPA is a Decision Server[^2]
 * Common infra for policy management/evaluation
 * Works for one-offs and/or your prod flows
 * Battle hardened, flexible deployments
 
-[^1]: https://www.openpolicyagent.org/docs/latest/rest-api/
+[^2]: https://www.openpolicyagent.org/docs/latest/rest-api/
 
 ---
+
 ## A query With No Data on Disk
 ```bash
 curl http://localhost:8000/tenant/Second  |\
@@ -116,6 +121,7 @@ curl http://localhost:8000/tenant/Second  |\
     -H "Content-Type: application/json" --data @-
 ```
 ---
+
 ## But there's more, right?
 * With our framework in place, can we do more interesting things?
 ::: incremental
@@ -123,6 +129,7 @@ curl http://localhost:8000/tenant/Second  |\
 * This rule will build on our existing ruleset
 
 ---
+
 ## A Rule on a Rule
 ### Data from an external source
 * OPA can load static data or reach out to endpoints
@@ -134,6 +141,7 @@ curl http://localhost:8000/tenant/Second  |\
 }
 ```
 ---
+
 ## A Rule on a Rule
 ### HR email address policy
 ```
@@ -166,6 +174,7 @@ app.post('/tenantWithCheck/:tenantId', async (req: Request, res: Response) => {
 ```
 
 ---
+
 ## Thanks!
 * Demo?
 * https://github.com/sweeneyb/policy-demos
