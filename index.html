@@ -177,7 +177,6 @@ accountFlows:
 <h3 id="the-policy">the policy</h3>
 <pre class="rego"><code>deny[msg] {
     flow := input.accountFlows[_]
-    # print(flow)
     some key
     m := is_internal_email(flow[key].responsibleEmail)
     not m
@@ -205,7 +204,7 @@ vhhcjfjj@vcap.me
 <h2>But Biz Shouldn’t Need conftest</h2>
 <ul>
 <li>While userful, this is a tall ask for less technical folks</li>
-<li>Clould we “cloud” it?</li>
+<li>Could we “cloud” it?</li>
 <li>OPA is the engine running as a server</li>
 </ul>
 </section>
@@ -263,6 +262,22 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="
     flow[key].FlowNodes[nodeSet][&quot;address&quot;] in data.servers[&quot;businessGroup&quot;][&quot;HR&quot;]
     msg = sprintf(&quot;External email addres in an HR flow  %v: %v&quot;, [key, flow[key].responsibleEmail])
 }</code></pre>
+</section>
+<section id="hr-policy-results" class="slide level2">
+<h2>HR Policy Results</h2>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span>curl <span class="ex">-s</span> http://localhost:8000/tenant/First  <span class="kw">|</span><span class="ex">jq</span> {<span class="st">&quot;input&quot;</span>:.} <span class="kw">|</span><span class="dt">\</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">curl</span> <span class="st">&quot;http://localhost:8181/v1/data/main&quot;</span> <span class="at">-H</span> <span class="st">&quot;Content-Type: application/json&quot;</span> <span class="at">--data</span> @-</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span><span class="dt">&quot;result&quot;</span><span class="fu">:{</span><span class="dt">&quot;HRviolation&quot;</span><span class="fu">:</span><span class="ot">[]</span><span class="fu">,</span><span class="dt">&quot;deny&quot;</span><span class="fu">:</span><span class="ot">[]</span><span class="fu">}}</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span>curl <span class="ex">-s</span> http://localhost:8000/tenant/Second  <span class="kw">|</span><span class="ex">jq</span> {<span class="st">&quot;input&quot;</span>:.} <span class="kw">|</span><span class="dt">\</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">curl</span> <span class="st">&quot;http://localhost:8181/v1/data/main&quot;</span> <span class="at">-H</span> <span class="st">&quot;Content-Type: application/json&quot;</span> <span class="at">--data</span> @- </span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span><span class="dt">&quot;result&quot;</span><span class="fu">:{</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;HRviolation&quot;</span><span class="fu">:</span><span class="ot">[</span><span class="st">&quot;External email addres in an HR flow  act_flow_001: foobar@vcap.me&quot;</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;deny&quot;</span><span class="fu">:</span><span class="ot">[</span><span class="st">&quot;External email addres in flow  act_flow_001: foobar@vcap.me&quot;</span><span class="ot">,</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;External email addres in flow  act_flow_003: vhhcjfjj@vcap.me&quot;</span><span class="ot">]</span><span class="fu">}}</span></span></code></pre></div>
 </section>
 <section id="add-feedback-to-api" class="slide level2">
 <h2>Add Feedback to API</h2>

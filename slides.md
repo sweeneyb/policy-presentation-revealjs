@@ -73,7 +73,6 @@ accountFlows:
 ```Rego
 deny[msg] {
     flow := input.accountFlows[_]
-    # print(flow)
     some key
     m := is_internal_email(flow[key].responsibleEmail)
     not m
@@ -103,7 +102,7 @@ vhhcjfjj@vcap.me
 
 ## But Biz Shouldn't Need conftest
 * While userful, this is a tall ask for less technical folks
-* Clould we "cloud" it?
+* Could we "cloud" it?
 * OPA is the engine running as a server
 
 ---
@@ -162,6 +161,30 @@ HRviolation[msg] {
     msg = sprintf("External email addres in an HR flow  %v: %v", [key, flow[key].responsibleEmail])
 }
 ```
+---
+
+## HR Policy Results
+```bash
+>curl -s http://localhost:8000/tenant/First  |jq {"input":.} |\
+  curl "http://localhost:8181/v1/data/main" -H "Content-Type: application/json" --data @-
+``` 
+```json
+{"result":{"HRviolation":[],"deny":[]}}
+```
+```bash
+>curl -s http://localhost:8000/tenant/Second  |jq {"input":.} |\
+  curl "http://localhost:8181/v1/data/main" -H "Content-Type: application/json" --data @- 
+```
+```json
+{"result":{
+  "HRviolation":["External email addres in an HR flow  act_flow_001: foobar@vcap.me"],
+  "deny":["External email addres in flow  act_flow_001: foobar@vcap.me",
+"External email addres in flow  act_flow_003: vhhcjfjj@vcap.me"]}}
+```
+
+
+---
+
 ## Add Feedback to API
 ```
 app.post('/tenantWithCheck/:tenantId', async (req: Request, res: Response) => {
