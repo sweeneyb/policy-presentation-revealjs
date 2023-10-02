@@ -21,8 +21,9 @@ And this is some text
 * My team should get out of the way of their data collection
 * If only there were a language that would allow them to express rules (and maybe let us enforce them)
 
+. . .
 
-There is - it's Rego
+**There is - it's Rego**
 
 ---
 
@@ -127,7 +128,9 @@ curl http://localhost:8000/tenant/Second  |\
 
 ## But there's more, right?
 * With our framework in place, can we do more interesting things?
-::: incremental
+
+. . .
+
 * Let's write a rule based on business unit
 * This rule will build on our existing ruleset
 
